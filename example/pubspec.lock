@@ -86,6 +86,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.8.0"
+  flutter_compass_v2:
+    dependency: transitive
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: a779c55583686bcabacb37618f17ec5185733789
+      url: "https://github.com/medyas/flutter_compass_v2.git"
+    source: git
+    version: "1.0.3"
   flutter_joystick:
     dependency: "direct main"
     description:
@@ -408,10 +417,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: f652077d0bdf60abe4c1f6377448e8655008eef28f128bc023f7b5e8dfeb48fc
+      sha256: "5c5f338a667b4c644744b661f309fb8080bb94b18a7e91ef1dbd343bed00ed6d"
       url: "https://pub.dev"
     source: hosted
-    version: "14.2.4"
+    version: "14.2.5"
   web:
     dependency: transitive
     description:

@@ -17,7 +17,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_compass: ^0.8.0
+  flutter_compass_v2:
+    git: https://github.com/medyas/flutter_compass_v2.git
   flutter_map: ^7.0.0
   geolocator: ^13.0.1
   latlong2: ^0.9.1
@@ -28,4 +29,3 @@ dev_dependencies:
     sdk: flutter
   lint: ^2.3.0
 
-flutter:

@@ -54,7 +54,7 @@ class CurrentLocationLayer extends StatefulWidget {
 
   /// When should the map follow current location. Default to
   /// [AlignOnUpdate.never].
-  final AlignOnUpdate alignPositionOnUpdate;
+  final ValueNotifier<AlignOnUpdate> alignPositionOnUpdate;
 
   /// The duration of the animation of following the map to the current
   /// location. Default to 200ms.
@@ -105,7 +105,7 @@ class CurrentLocationLayer extends StatefulWidget {
     this.headingStream,
     FocalPoint? focalPoint,
     Stream<double?>? alignPositionStream,
-    AlignOnUpdate? alignPositionOnUpdate,
+    ValueNotifier<AlignOnUpdate>? alignPositionOnUpdate,
     Stream<void>? alignDirectionStream,
     AlignOnUpdate? alignDirectionOnUpdate,
     Duration? alignPositionAnimationDuration,
@@ -143,7 +143,8 @@ class CurrentLocationLayer extends StatefulWidget {
             ),
         alignPositionStream =
             alignPositionStream ?? followCurrentLocationStream,
-        alignPositionOnUpdate = alignPositionOnUpdate ?? followOnLocationUpdate,
+        alignPositionOnUpdate =
+            alignPositionOnUpdate ?? ValueNotifier(followOnLocationUpdate),
         alignPositionAnimationDuration =
             alignPositionAnimationDuration ?? followAnimationDuration,
         alignPositionAnimationCurve =
@@ -169,7 +170,7 @@ class CurrentLocationLayer extends StatefulWidget {
       ..add(DiagnosticsProperty('focalPoint', focalPoint))
       ..add(DiagnosticsProperty('alignPositionStream', alignPositionStream))
       ..add(DiagnosticsProperty('alignDirectionStream', alignDirectionStream))
-      ..add(EnumProperty('alignPositionOnUpdate', alignPositionOnUpdate))
+      ..add(EnumProperty('alignPositionOnUpdate', alignPositionOnUpdate.value))
       ..add(EnumProperty('alignDirectionOnUpdate', alignDirectionOnUpdate))
       ..add(
         DiagnosticsProperty(
@@ -269,6 +270,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
 
   @override
   Widget build(BuildContext context) {
+    print('LOCATION LAYER STATUS=${_status}');
     switch (_status) {
       case _Status.initialing:
         return const SizedBox.shrink();
@@ -380,6 +382,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
   void _subscriptPositionStream() {
     final positionStream = widget.positionStream ??
         const LocationMarkerDataStreamFactory().fromGeolocatorPositionStream();
+    print('sub pos stream');
     _positionStreamSubscription = positionStream.listen(
       (position) {
         if (!mounted) {
@@ -404,7 +407,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           _moveMarker(position);
 
           bool alignPosition;
-          switch (widget.alignPositionOnUpdate) {
+          switch (widget.alignPositionOnUpdate.value) {
             case AlignOnUpdate.always:
               alignPosition = true;
             case AlignOnUpdate.once:

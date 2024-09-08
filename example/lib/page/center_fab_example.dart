@@ -11,13 +11,13 @@ class CenterFabExample extends StatefulWidget {
 }
 
 class _CenterFabExampleState extends State<CenterFabExample> {
-  late AlignOnUpdate _alignPositionOnUpdate;
+  late ValueNotifier<AlignOnUpdate> _alignPositionOnUpdate;
   late final StreamController<double?> _alignPositionStreamController;
 
   @override
   void initState() {
     super.initState();
-    _alignPositionOnUpdate = AlignOnUpdate.always;
+    _alignPositionOnUpdate = ValueNotifier(AlignOnUpdate.always);
     _alignPositionStreamController = StreamController<double?>();
   }
 
@@ -42,9 +42,9 @@ class _CenterFabExampleState extends State<CenterFabExample> {
           // Stop aligning the location marker to the center of the map widget
           // if user interacted with the map.
           onPositionChanged: (MapCamera camera, bool hasGesture) {
-            if (hasGesture && _alignPositionOnUpdate != AlignOnUpdate.never) {
+            if (hasGesture && _alignPositionOnUpdate.value != AlignOnUpdate.never) {
               setState(
-                () => _alignPositionOnUpdate = AlignOnUpdate.never,
+                () => _alignPositionOnUpdate.value = AlignOnUpdate.never,
               );
             }
           },
@@ -70,7 +70,7 @@ class _CenterFabExampleState extends State<CenterFabExample> {
                   // Align the location marker to the center of the map widget
                   // on location update until user interact with the map.
                   setState(
-                    () => _alignPositionOnUpdate = AlignOnUpdate.always,
+                    () => _alignPositionOnUpdate.value = AlignOnUpdate.always,
                   );
                   // Align the location marker to the center of the map widget
                   // and zoom the map to level 18.

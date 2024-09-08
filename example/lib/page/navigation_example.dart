@@ -14,7 +14,7 @@ class NavigationExample extends StatefulWidget {
 class _NavigationExampleState extends State<NavigationExample> {
   late bool _navigationMode;
   late int _pointerCount;
-  late AlignOnUpdate _alignPositionOnUpdate;
+  late ValueNotifier<AlignOnUpdate> _alignPositionOnUpdate;
   late AlignOnUpdate _alignDirectionOnUpdate;
   late final StreamController<double?> _alignPositionStreamController;
   late final StreamController<void> _alignDirectionStreamController;
@@ -24,7 +24,7 @@ class _NavigationExampleState extends State<NavigationExample> {
     super.initState();
     _navigationMode = false;
     _pointerCount = 0;
-    _alignPositionOnUpdate = AlignOnUpdate.never;
+    _alignPositionOnUpdate = ValueNotifier(AlignOnUpdate.never);
     _alignDirectionOnUpdate = AlignOnUpdate.never;
     _alignPositionStreamController = StreamController<double?>();
     _alignDirectionStreamController = StreamController<void>();
@@ -92,7 +92,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                   setState(
                     () {
                       _navigationMode = !_navigationMode;
-                      _alignPositionOnUpdate = _navigationMode
+                      _alignPositionOnUpdate.value = _navigationMode
                           ? AlignOnUpdate.always
                           : AlignOnUpdate.never;
                       _alignDirectionOnUpdate = _navigationMode
@@ -121,7 +121,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   void _onPointerDown(e, l) {
     _pointerCount++;
     setState(() {
-      _alignPositionOnUpdate = AlignOnUpdate.never;
+      _alignPositionOnUpdate.value = AlignOnUpdate.never;
       _alignDirectionOnUpdate = AlignOnUpdate.never;
     });
   }
@@ -131,7 +131,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   void _onPointerUp(e, l) {
     if (--_pointerCount == 0 && _navigationMode) {
       setState(() {
-        _alignPositionOnUpdate = AlignOnUpdate.always;
+        _alignPositionOnUpdate.value = AlignOnUpdate.always;
         _alignDirectionOnUpdate = AlignOnUpdate.always;
       });
       _alignPositionStreamController.add(18);

@@ -67,7 +67,7 @@ class _NavigationExampleState extends State<NavigationExample> {
             ),
             alignPositionStream: _alignPositionStreamController.stream,
             alignDirectionStream: _alignDirectionStreamController.stream,
-            alignPositionOnUpdate: _alignPositionOnUpdate,
+            alignPositionOnUpdate: ValueNotifier(_alignPositionOnUpdate),
             alignDirectionOnUpdate: _alignDirectionOnUpdate,
             style: const LocationMarkerStyle(
               marker: DefaultLocationMarker(

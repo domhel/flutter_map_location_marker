@@ -54,7 +54,7 @@ class CurrentLocationLayer extends StatefulWidget {
 
   /// When should the map follow current location. Default to
   /// [AlignOnUpdate.never].
-  final AlignOnUpdate alignPositionOnUpdate;
+  final ValueNotifier<AlignOnUpdate> alignPositionOnUpdate;
 
   /// The duration of the animation of following the map to the current
   /// location. Default to 200ms.
@@ -98,14 +98,14 @@ class CurrentLocationLayer extends StatefulWidget {
   final LocationMarkerIndicators indicators;
 
   /// Create a CurrentLocationLayer.
-  const CurrentLocationLayer({
+  CurrentLocationLayer({
     super.key,
     this.style = const LocationMarkerStyle(),
     this.positionStream,
     this.headingStream,
     this.focalPoint = const FocalPoint(),
     this.alignPositionStream,
-    this.alignPositionOnUpdate = AlignOnUpdate.never,
+    ValueNotifier<AlignOnUpdate>? alignPositionOnUpdate,
     this.alignDirectionStream,
     this.alignDirectionOnUpdate = AlignOnUpdate.never,
     this.alignPositionAnimationDuration = const Duration(milliseconds: 200),
@@ -117,7 +117,8 @@ class CurrentLocationLayer extends StatefulWidget {
     this.rotateAnimationDuration = const Duration(milliseconds: 120),
     this.rotateAnimationCurve = Curves.easeOut,
     this.indicators = const LocationMarkerIndicators(),
-  });
+  }): alignPositionOnUpdate =
+            alignPositionOnUpdate ?? ValueNotifier(AlignOnUpdate.never);
 
   @override
   State<CurrentLocationLayer> createState() => _CurrentLocationLayerState();
@@ -132,7 +133,7 @@ class CurrentLocationLayer extends StatefulWidget {
       ..add(DiagnosticsProperty('focalPoint', focalPoint))
       ..add(DiagnosticsProperty('alignPositionStream', alignPositionStream))
       ..add(DiagnosticsProperty('alignDirectionStream', alignDirectionStream))
-      ..add(EnumProperty('alignPositionOnUpdate', alignPositionOnUpdate))
+      ..add(EnumProperty('alignPositionOnUpdate', alignPositionOnUpdate.value))
       ..add(EnumProperty('alignDirectionOnUpdate', alignDirectionOnUpdate))
       ..add(
         DiagnosticsProperty(
@@ -391,7 +392,7 @@ class _CurrentLocationLayerState extends State<CurrentLocationLayer>
           _moveMarker(position);
 
           bool alignPosition;
-          switch (widget.alignPositionOnUpdate) {
+          switch (widget.alignPositionOnUpdate.value) {
             case AlignOnUpdate.always:
               alignPosition = true;
             case AlignOnUpdate.once:
